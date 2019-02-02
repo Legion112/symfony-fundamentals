@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Service\MarkdownHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,13 +33,21 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="article_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper)
+    public function show($slug, EntityManagerInterface $em)
     {
         $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
             'Woohoo! I\'m going on an all-asteroid diet!',
             'I like bacon too! Buy some from my site! bakinsomebacon.com',
         ];
+
+        $repository = $em->getRepository(Article::class);
+        /** @var Article $article */
+        $article = $repository->findOneBy(['slug' => $slug]);
+
+        if (!$article) {
+            throw $this->createNotFoundException(sprintf('No article for slug "%s"', $slug));
+        }
 
         $articleContent = <<< EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
@@ -58,13 +68,8 @@ cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim ca
 fugiat.
 
 EOF;
-
-        $articleContent = $markdownHelper->parse($articleContent);
-
         return $this->render('article/show.html.twig', [
-            'title' => ucwords(str_replace('-', ' ', $slug)),
-            'articleContent' => $articleContent,
-            'slug' => $slug,
+            'article' => $article,
             'comments' => $comments,
         ]);
     }
