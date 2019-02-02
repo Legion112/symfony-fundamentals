@@ -17,7 +17,6 @@ class ArticleController extends AbstractController
 
     public function __construct(bool $isDebug)
     {
-        dump($isDebug);die;
         $this->isDebug = $isDebug;
     }
 

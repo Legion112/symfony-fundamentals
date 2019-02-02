@@ -39,7 +39,6 @@ class MarkdownHelper
         if ($this->isDebug) {
             return $this->markdown->transform($source);
         }
-        dump($this->cache);die;
 
         $item = $this->cache->getItem('markdown_'.md5($source));
         if (!$item->isHit()) {
