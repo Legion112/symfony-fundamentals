@@ -10,7 +10,6 @@ namespace App\Controller;
 
 
 use App\Entity\Article;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +49,10 @@ EOF
         if (rand(1,10) > 2) {
             $article->setPublishedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
         }
+
+        $article->setAuthor('Mike Ferengi')
+            ->setHeartCount(rand(5, 100))
+            ->setImageFilename('asteroid.jpeg');
 
         $em->persist($article);
         $em->flush();
