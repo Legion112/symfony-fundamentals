@@ -178,6 +178,11 @@ class Article
         return $this->comments;
     }
 
+    public function getNonDeletedComments(): Collection
+    {
+        return $this->comments;
+    }
+
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
