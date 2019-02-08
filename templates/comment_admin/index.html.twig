@@ -16,6 +16,7 @@
                            name="q"
                            class="form-control"
                            placeholder="Search..."
+                           value="{{ app.request.get('q') }}"
                     >
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary"
@@ -51,6 +52,12 @@
                         </td>
                         <td>
                             {{ comment.createdAt|ago }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            No comments found
                         </td>
                     </tr>
                 {% endfor %}
